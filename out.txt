@@ -1,0 +1,30 @@
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::        (v2.0.2.RELEASE)
+
+2018-05-17 14:27:47.456  INFO 9088 --- [           main] c.e.f.FileOrganizerApplication           : Starting FileOrganizerApplication v0.0.1-SNAPSHOT on JMCGINNIS with PID 9088 (C:\projects\examples\spring\file-organizer\target\file-sorter-0.0.1-SNAPSHOT.jar started by jmcginni in C:\projects\examples\spring\file-organizer)
+2018-05-17 14:27:47.460  INFO 9088 --- [           main] c.e.f.FileOrganizerApplication           : The following profiles are active: dev
+2018-05-17 14:27:47.502  INFO 9088 --- [           main] s.c.a.AnnotationConfigApplicationContext : Refreshing org.springframework.context.annotation.AnnotationConfigApplicationContext@31b7dea0: startup date [Thu May 17 14:27:47 PDT 2018]; root of context hierarchy
+2018-05-17 14:27:48.030  INFO 9088 --- [           main] o.s.j.e.a.AnnotationMBeanExporter        : Registering beans for JMX exposure on startup
+2018-05-17 14:27:48.042  INFO 9088 --- [           main] c.e.f.FileOrganizerApplication           : Started FileOrganizerApplication in 0.954 seconds (JVM running for 1.335)
+begin processing with the following config...
+FileOrganizerConfig [sourcedir=c:\tmp\test\source, destdir=c:\tmp\test\dest, extensions=[jpg, jpeg, png]]
+[SUCCESS] c:\tmp\test\source\folder1\test.jpg ---> c:\tmp\test\dest\2018\apr-jun\test.jpg
+[SUCCESS] c:\tmp\test\source\folder1\test1.jpg ---> c:\tmp\test\dest\2018\apr-jun\test1.jpg
+[SUCCESS] c:\tmp\test\source\folder1\test2.jpg ---> c:\tmp\test\dest\2018\apr-jun\test2.jpg
+[SUCCESS] c:\tmp\test\source\folder1\test.jpeg ---> c:\tmp\test\dest\2018\apr-jun\test.jpeg
+[SUCCESS] c:\tmp\test\source\folder1\test1.jpeg ---> c:\tmp\test\dest\2018\apr-jun\test1.jpeg
+[SUCCESS] c:\tmp\test\source\folder1\test2.jpeg ---> c:\tmp\test\dest\2018\apr-jun\test2.jpeg
+[SUCCESS] c:\tmp\test\source\folder1\test.png ---> c:\tmp\test\dest\2018\apr-jun\test.png
+[SUCCESS] c:\tmp\test\source\folder1\test1.png ---> c:\tmp\test\dest\2018\apr-jun\test1.png
+[SUCCESS] c:\tmp\test\source\folder1\test2.png ---> c:\tmp\test\dest\2018\apr-jun\test2.png
+total files processed=9
+total files moved=9
+total files errored=0
+2018-05-17 14:27:48.068  INFO 9088 --- [       Thread-2] s.c.a.AnnotationConfigApplicationContext : Closing org.springframework.context.annotation.AnnotationConfigApplicationContext@31b7dea0: startup date [Thu May 17 14:27:47 PDT 2018]; root of context hierarchy
+2018-05-17 14:27:48.070  INFO 9088 --- [       Thread-2] o.s.j.e.a.AnnotationMBeanExporter        : Unregistering JMX-exposed beans on shutdown

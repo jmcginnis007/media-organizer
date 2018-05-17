@@ -1,0 +1,11 @@
+fileorganizer: 
+  sourcedir: c:\tmp\test\source
+  destdir: c:\tmp\test\dest
+  testmode: true
+  extensions:
+    - jpg
+    - jpeg
+    - png
+    - JPG
+    - JPEG
+    - PNG
