@@ -9,6 +9,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.FileTime;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
@@ -41,11 +42,8 @@ public class FileOrganizerService {
 		for (String extension : extensions) {
 			processFiles(sourceDir, destDir, extension);
 		}
-				
-		System.out.println("total files processed=" + total);
-		System.out.println("total files moved=" + success);
-		System.out.println("total files errored=" + (config.getTestmode() ? "0" : (total - success)));
-		return new Results();
+		
+		return new Results(success, total, config.getTestmode() ? 0 : (total - success));
 	}
 	
 	private void processFiles(String sourceDir, String destDir, String extension) throws IOException {
@@ -57,14 +55,27 @@ public class FileOrganizerService {
 	}
 	
 	private void processFile(Path file, String destDirRoot) {
+		String destinationPath = "";
 		total++;
 		LocalDate creationDate = getFileCreationDate(file);
+		LocalDate metaCreationDate = getImageDateTaken(file);
 		
-		if (creationDate != null) {
-			String destinationPath = destDirRoot + getDestinationPath(creationDate) + file.getFileName();
+		// only move files that i found meta creation date in
+		if (config.getMetadataonly() && metaCreationDate != null)
+		{
+			destinationPath = destDirRoot + getDestinationPath(metaCreationDate) + file.getFileName();
 			moveFile(file, destinationPath);
-		}
-		
+		} 
+		else if (!config.getMetadataonly()) {
+			// choose meta creation date if we have it, otherwise fall back to file creation date
+			if (metaCreationDate != null) {
+				destinationPath = destDirRoot + getDestinationPath(metaCreationDate) + file.getFileName();
+			}
+			else {
+				destinationPath = destDirRoot + getDestinationPath(creationDate) + file.getFileName();
+			}
+			moveFile(file, destinationPath);
+		}		
 	}
 	
 	private LocalDate getFileCreationDate(Path file) {
@@ -99,6 +110,7 @@ public class FileOrganizerService {
 	}
 	
 	private void moveFile(Path file, String destinationPath) {
+		if (config.getShowalltags()) printAllImageTags(file); 
 		
 		if (config.getTestmode()) {
 			System.out.println("[TEST] " + file.toString() + " ---> " + destinationPath + "[" + getImageDateTaken(file) + "]");
@@ -116,10 +128,12 @@ public class FileOrganizerService {
 		}
 	}
 	
-	private Date getImageDateTaken(Path path) {
+	private LocalDate getImageDateTaken(Path path) {
 		//https://github.com/drewnoakes/metadata-extractor
 		File imageFile = new File(path.toString());
 		Date dateTaken = null;
+		LocalDate metaDateTaken = null;
+		
 		try {
 			Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
 			// obtain the Exif directory
@@ -135,7 +149,11 @@ public class FileOrganizerService {
 		} catch (ImageProcessingException | IOException e) {
 			e.printStackTrace();
 		}
-		return dateTaken;
+		
+		if (dateTaken != null) {
+			metaDateTaken = dateTaken.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+		}
+		return metaDateTaken;
 	}
 	
 	private void printAllImageTags(Path path) {

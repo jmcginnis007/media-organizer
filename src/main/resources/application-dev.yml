@@ -2,10 +2,14 @@ fileorganizer:
   sourcedir: c:\tmp\test\source
   destdir: c:\tmp\test\dest
   testmode: true
+  showalltags: false
+  metadataonly: false
   extensions:
     - jpg
     - jpeg
+    - mov
     - png
     - JPG
     - JPEG
     - PNG
+    - MOV

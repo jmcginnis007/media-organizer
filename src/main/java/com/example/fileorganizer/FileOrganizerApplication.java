@@ -23,6 +23,8 @@ public class FileOrganizerApplication {
 			System.out.println(config);
 			
 			Results results = service.organizeFiles(config.getSourcedir(), config.getDestdir(), config.getExtensions());
+			
+			System.out.println(results);
 		};
 	}
 }
