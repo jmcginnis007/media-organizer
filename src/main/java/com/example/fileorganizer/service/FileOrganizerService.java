@@ -33,6 +33,7 @@ public class FileOrganizerService {
 	
 	private int total = 0;
 	private int success = 0;
+	private int duplicatesDeleted = 0;
 	
 	@Autowired
 	private FileOrganizerConfig config;
@@ -43,7 +44,7 @@ public class FileOrganizerService {
 			processFiles(sourceDir, destDir, extension);
 		}
 		
-		return new Results(success, total, config.getTestmode() ? 0 : (total - success));
+		return new Results(success, total, config.getTestmode() ? 0 : (total - success), duplicatesDeleted);
 	}
 	
 	private void processFiles(String sourceDir, String destDir, String extension) throws IOException {
@@ -63,27 +64,27 @@ public class FileOrganizerService {
 		// only move files that i found meta creation date in
 		if (config.getMetadataonly() && metaCreationDate != null)
 		{
-			destinationPath = destDirRoot + getDestinationPath(metaCreationDate) + file.getFileName();
+			destinationPath = destDirRoot + assembleDestinationPath(metaCreationDate) + file.getFileName();
 			moveFile(file, destinationPath);
 		} 
 		else if (!config.getMetadataonly()) {
 			// choose meta creation date if we have it, otherwise fall back to file creation date
 			if (metaCreationDate != null) {
-				destinationPath = destDirRoot + getDestinationPath(metaCreationDate) + file.getFileName();
+				destinationPath = destDirRoot + assembleDestinationPath(metaCreationDate) + file.getFileName();
 			}
 			else {
-				destinationPath = destDirRoot + getDestinationPath(creationDate) + file.getFileName();
+				destinationPath = destDirRoot + assembleDestinationPath(creationDate) + file.getFileName();
 			}
 			moveFile(file, destinationPath);
 		}		
 	}
 	
-	private LocalDate getFileCreationDate(Path file) {
+	private LocalDate getFileCreationDate(Path path) {
 		BasicFileAttributes attributes;
 		LocalDate localDate = null;
 		
 		try {
-			attributes = Files.readAttributes(file,  BasicFileAttributes.class);
+			attributes = Files.readAttributes(path,  BasicFileAttributes.class);
 			FileTime fileTime = attributes.creationTime();
 			String pattern = "yyyy-MM-dd";
 		    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -99,7 +100,7 @@ public class FileOrganizerService {
 		return localDate;
 	}
 	
-	private String getDestinationPath(LocalDate fileCreationDate) {
+	private String assembleDestinationPath(LocalDate fileCreationDate) {
 		int month = fileCreationDate.getMonthValue();
 		int year = fileCreationDate.getYear();
 		
@@ -109,27 +110,28 @@ public class FileOrganizerService {
 		return destinationPath;
 	}
 	
-	private void moveFile(Path file, String destinationPath) {
-		if (config.getShowalltags()) printAllImageTags(file); 
+	private void moveFile(Path path, String destinationPath) {
+		if (config.getShowalltags()) printAllImageTags(path); 
 		
 		if (config.getTestmode()) {
-			System.out.println("[TEST] " + file.toString() + " ---> " + destinationPath + "[" + getImageDateTaken(file) + "]");
+			System.out.println("[TEST] " + path.toString() + " ---> " + destinationPath + "[" + getImageDateTaken(path) + "]");
 			return;
 		}
 		
 		try {
 			FileUtils.moveFile(
-				      FileUtils.getFile(file.toString()), 
+				      FileUtils.getFile(path.toString()), 
 				      FileUtils.getFile(destinationPath));
 			success++;
-			System.out.println("[SUCCESS] " + file.toString() + " ---> " + destinationPath);
+			System.out.println("[SUCCESS] " + path.toString() + " ---> " + destinationPath);
 		} catch (IOException e) {
-			System.out.println("[ERROR] Unable to move file " + file.toString());
+			System.out.println("[ERROR] Unable to move file " + path.toString() + " -- " + e.getMessage());
+			deleteDuplicate(path, destinationPath);
 		}
 	}
 	
 	private LocalDate getImageDateTaken(Path path) {
-		//https://github.com/drewnoakes/metadata-extractor
+		// see https://github.com/drewnoakes/metadata-extractor
 		File imageFile = new File(path.toString());
 		Date dateTaken = null;
 		LocalDate metaDateTaken = null;
@@ -158,7 +160,7 @@ public class FileOrganizerService {
 	
 	private void printAllImageTags(Path path) {
 		File imageFile = new File(path.toString());
-		
+
 		try {
 			Metadata metadata = ImageMetadataReader.readMetadata(imageFile);
 			for (Directory directory : metadata.getDirectories()) {
@@ -169,5 +171,28 @@ public class FileOrganizerService {
 		} catch (ImageProcessingException | IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void deleteDuplicate(Path path, String destinationPath) {
+		if (!config.getDeleteduplicates()) return;
+		long sourceFileSize = getFileSize(path);
+		long destFileSize = getFileSize(Paths.get(destinationPath));
+		
+		if (sourceFileSize == destFileSize) {
+			System.out.println("[DUP] source file is a duplicate so deleting " + path.toString() + "...");
+			try {
+				Files.delete(path);
+				duplicatesDeleted++;
+				System.out.println("[SUCCESS] successfully deleted " + path.toString());
+			} catch (IOException e) {
+				System.out.println("[ERROR]...unable to delete" + path.toString());
+			}
+		}
+		else System.out.println("[NODUP] source file is NOT a duplicate so leaving " + path.toString() + "...");
+	}
+	
+	private long getFileSize(Path path) {
+		File imageFile = new File(path.toString());
+		return imageFile.length();
 	}
 }

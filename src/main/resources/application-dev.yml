@@ -1,9 +1,10 @@
 fileorganizer: 
   sourcedir: c:\tmp\test\source
   destdir: c:\tmp\test\dest
-  testmode: true
+  testmode: false
   showalltags: false
   metadataonly: false
+  deleteduplicates: true
   extensions:
     - jpg
     - jpeg

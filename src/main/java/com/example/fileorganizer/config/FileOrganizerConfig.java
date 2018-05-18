@@ -14,6 +14,7 @@ public class FileOrganizerConfig {
 	private Boolean testmode; // if true, won't actually move the file
 	private Boolean showalltags; // if true it will print out all meta tags for each file
 	private Boolean metadataonly; // if true, only process a file that has date in the meta data
+	private Boolean deleteduplicates; // if a copy fails due file already exists, should we delete the duplicate from the source dir?
 	private List<String> extensions;
 	
 	public String getSourcedir() {
@@ -52,11 +53,16 @@ public class FileOrganizerConfig {
 	public void setMetadataonly(Boolean metadataonly) {
 		this.metadataonly = metadataonly;
 	}
+	public Boolean getDeleteduplicates() {
+		return deleteduplicates;
+	}
+	public void setDeleteduplicates(Boolean deleteduplicates) {
+		this.deleteduplicates = deleteduplicates;
+	}
 	@Override
 	public String toString() {
 		return "FileOrganizerConfig [sourcedir=" + sourcedir + ", destdir=" + destdir + ", testmode=" + testmode
-				+ ", showalltags=" + showalltags + ", metadataonly=" + metadataonly + ", extensions=" + extensions
-				+ "]";
-	}
-	
+				+ ", showalltags=" + showalltags + ", metadataonly=" + metadataonly + ", deleteduplicates="
+				+ deleteduplicates + ", extensions=" + extensions + "]";
+	}	
 }
