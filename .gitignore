@@ -23,3 +23,6 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### local config ###
+src/main/resources/application-local.yml

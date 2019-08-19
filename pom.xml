@@ -5,12 +5,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.example</groupId>
-	<artifactId>file-sorter</artifactId>
+	<artifactId>media-sorter</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>file-sorter</name>
-	<description>Demo project for Spring Boot</description>
+	<name>media-sorter</name>
+	<description>Media file organizer</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

@@ -1,0 +1,27 @@
+media-organizer: 
+  source-directory: \\server\share\source
+  test-mode: false
+  log-all-tags: false
+  mode: DUPLICATE_HUNTER  #TO_QUARTERLY_FOLDERS
+  quarterly-folders:    
+    destination-directory: \\server\share\dest
+    date-source: METADATA_THEN_FILE_CREATION  #	see com.example.mediaorganizer.domain.DateSources enum
+    delete-duplicates: false
+    file-extensions:
+    - jpg
+    - jpeg
+    - mov
+    - mp4
+    - png
+    - JPG
+    - JPEG
+    - PNG
+    - MOV
+    - MP4
+  duplicate-hunter:
+    file-extensions:
+    - jpg
+    - jpeg
+    - JPG
+    - JPEG
+  
