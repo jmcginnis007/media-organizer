@@ -18,6 +18,9 @@ public class ServiceManager {
 
 	@Autowired
 	private DuplicateHunter duplicateHunter;
+	
+	@Autowired
+	private RenameFilesService renameFileService;
 
 	public void process() {
 		Results results = null;
@@ -30,6 +33,10 @@ public class ServiceManager {
 				}
 				case TO_QUARTERLY_FOLDERS: {
 					results = quarterlyFolderService.organize();
+					break;
+				}
+				case RENAME_FILES: {
+					results = renameFileService.organize();
 					break;
 				}
 				default: {

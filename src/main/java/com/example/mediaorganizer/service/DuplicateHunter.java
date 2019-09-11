@@ -36,7 +36,7 @@ public class DuplicateHunter implements ServiceInterface {
 	public Results organize() throws IOException {
 
 		String sourceDir = config.getSourceDirectory();
-		List<String> extensions = config.getDuplicateHunter().getFileExtensions();
+		List<String> extensions = config.getDuplicateHunterConfig().getFileExtensions();
 
 		for (String extension : extensions) {
 			processFiles(sourceDir, extension);
@@ -116,7 +116,8 @@ public class DuplicateHunter implements ServiceInterface {
 
 	private void deleteDuplicate(Path path, Path original) {
 		if (config.isTestMode()) {
-			System.out.println("[TEST] " + path + " is a duplicate of " + original);
+			//System.out.println("[TEST] " + path + " is a duplicate of " + original);
+			duplicatesDeleted++;
 			return;
 		}
 

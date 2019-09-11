@@ -15,10 +15,11 @@ public class Config {
 	private String sourceDirectory;
 	private boolean testMode; // if true, won't actually change the file system
 	private Modes mode;
-	private QuarterlyFolders quarterlyFolders = new QuarterlyFolders();
-	private DuplicateHunter duplicateHunter = new DuplicateHunter();
+	private QuarterlyFoldersConfig quarterlyFoldersConfig = new QuarterlyFoldersConfig();
+	private DuplicateHunterConfig duplicateHunterConfig = new DuplicateHunterConfig();
+	private RenameFilesConfig renameFilesConfig = new RenameFilesConfig();
 
-	public static class QuarterlyFolders {
+	public static class QuarterlyFoldersConfig {
 		private String destinationDirectory;
 		private DateSources dateSource;
 		private boolean deleteDuplicates;
@@ -56,7 +57,7 @@ public class Config {
 		public void setLogAllTags(boolean logAllTags) {
 			this.logAllTags = logAllTags;
 		}
-		
+
 		public List<String> getFileExtensions() {
 			return fileExtensions;
 		}
@@ -72,11 +73,11 @@ public class Config {
 					+ fileExtensions + "]";
 		}
 	}
-	
-	public static class DuplicateHunter {
-		
+
+	public static class DuplicateHunterConfig {
+
 		private List<String> fileExtensions;
-		
+
 		public List<String> getFileExtensions() {
 			return fileExtensions;
 		}
@@ -89,7 +90,34 @@ public class Config {
 		public String toString() {
 			return "DuplicateHunter [fileExtensions=" + fileExtensions + "]";
 		}
-		
+
+	}
+
+	public static class RenameFilesConfig {
+		private String replace;
+		private String replaceWith;
+
+		public String getReplace() {
+			return replace;
+		}
+
+		public void setReplace(String replace) {
+			this.replace = replace;
+		}
+
+		public String getReplaceWith() {
+			return replaceWith;
+		}
+
+		public void setReplaceWith(String replaceWith) {
+			this.replaceWith = replaceWith;
+		}
+
+		@Override
+		public String toString() {
+			return "RenameFilesConfig [replace=" + replace + ", replaceWith=" + replaceWith + "]";
+		}
+
 	}
 
 	public String getSourceDirectory() {
@@ -116,25 +144,35 @@ public class Config {
 		this.mode = mode;
 	}
 
-	public QuarterlyFolders getQuarterlyFolders() {
-		return quarterlyFolders;
+	public QuarterlyFoldersConfig getQuarterlyFoldersConfig() {
+		return quarterlyFoldersConfig;
 	}
 
-	public void setQuarterlyFolders(QuarterlyFolders quarterlyFolders) {
-		this.quarterlyFolders = quarterlyFolders;
+	public void setQuarterlyFoldersConfig(QuarterlyFoldersConfig quarterlyFoldersConfig) {
+		this.quarterlyFoldersConfig = quarterlyFoldersConfig;
 	}
 
-	public DuplicateHunter getDuplicateHunter() {
-		return duplicateHunter;
+	public DuplicateHunterConfig getDuplicateHunterConfig() {
+		return duplicateHunterConfig;
 	}
 
-	public void setDuplicateHunter(DuplicateHunter duplicateHunter) {
-		this.duplicateHunter = duplicateHunter;
+	public void setDuplicateHunterConfig(DuplicateHunterConfig duplicateHunterConfig) {
+		this.duplicateHunterConfig = duplicateHunterConfig;
+	}
+
+	public RenameFilesConfig getRenameFilesConfig() {
+		return renameFilesConfig;
+	}
+
+	public void setRenameFilesConfig(RenameFilesConfig renameFilesConfig) {
+		this.renameFilesConfig = renameFilesConfig;
 	}
 
 	@Override
 	public String toString() {
 		return "Config [sourceDirectory=" + sourceDirectory + ", testMode=" + testMode + ", mode=" + mode
-				+ ", quarterlyFolders=" + quarterlyFolders + "]";
+				+ ", quarterlyFoldersConfig=" + quarterlyFoldersConfig + ", duplicateHunterConfig="
+				+ duplicateHunterConfig + ", renameFilesConfig=" + renameFilesConfig + "]";
 	}
+	
 }

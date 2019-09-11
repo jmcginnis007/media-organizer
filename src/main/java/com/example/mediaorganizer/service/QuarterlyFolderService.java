@@ -41,8 +41,8 @@ public class QuarterlyFolderService implements ServiceInterface {
 	public Results organize() throws IOException {
 
 		String sourceDir = config.getSourceDirectory();
-		String destDir = config.getQuarterlyFolders().getDestinationDirectory();
-		List<String> extensions = config.getQuarterlyFolders().getFileExtensions();
+		String destDir = config.getQuarterlyFoldersConfig().getDestinationDirectory();
+		List<String> extensions = config.getQuarterlyFoldersConfig().getFileExtensions();
 
 		for (String extension : extensions) {
 			processFiles(sourceDir, destDir, extension);
@@ -63,7 +63,7 @@ public class QuarterlyFolderService implements ServiceInterface {
 		String destinationPath = getDestinationPath(file);
 
 		if (destinationPath == null) {
-			if (config.getQuarterlyFolders().getDateSource().equals(DateSources.METADATA_ONLY)) {
+			if (config.getQuarterlyFoldersConfig().getDateSource().equals(DateSources.METADATA_ONLY)) {
 				System.out.println(
 						"[NOMETA] " + file.toString() + " doesn't have any readable metadata [metadataonly= true]");
 			} else {
@@ -80,14 +80,14 @@ public class QuarterlyFolderService implements ServiceInterface {
 		LocalDate fileDate = getFileDate(file);
 
 		if (fileDate == null) {
-			if (config.getQuarterlyFolders().getDateSource().equals(DateSources.METADATA_ONLY)) {
+			if (config.getQuarterlyFoldersConfig().getDateSource().equals(DateSources.METADATA_ONLY)) {
 				System.out.println(
 						"[NOMETA] " + file.toString() + " doesn't have any readable metadata [metadataonly= true]");
 			} else {
 				System.out.println("[ERROR] " + file.toString() + " failed to read file system date, skipping...");
 			}
 		} else {
-			destinationPath = config.getQuarterlyFolders().getDestinationDirectory() + assembleDestinationPath(fileDate)
+			destinationPath = config.getQuarterlyFoldersConfig().getDestinationDirectory() + assembleDestinationPath(fileDate)
 					+ file.getFileName();
 		}
 
@@ -97,7 +97,7 @@ public class QuarterlyFolderService implements ServiceInterface {
 	private LocalDate getFileDate(Path file) {
 		LocalDate fileDate = null;
 
-		switch (config.getQuarterlyFolders().getDateSource()) {
+		switch (config.getQuarterlyFoldersConfig().getDateSource()) {
 		case FILE_CREATION: {
 			fileDate = DateUtils.getFileSystemDate(file, DateSources.FILE_CREATION);
 		}
@@ -136,7 +136,7 @@ public class QuarterlyFolderService implements ServiceInterface {
 	}
 
 	private void moveFile(Path path, String destinationPath) {
-		if (config.getQuarterlyFolders().isLogAllTags())
+		if (config.getQuarterlyFoldersConfig().isLogAllTags())
 			printAllImageTags(path);
 
 		if (config.isTestMode()) {
@@ -203,7 +203,7 @@ public class QuarterlyFolderService implements ServiceInterface {
 	}
 
 	private void deleteDuplicate(Path path, String destinationPath) {
-		if (!config.getQuarterlyFolders().isDeleteDuplicates())
+		if (!config.getQuarterlyFoldersConfig().isDeleteDuplicates())
 			return;
 		long sourceFileSize = getFileSize(path);
 		long destFileSize = getFileSize(Paths.get(destinationPath));

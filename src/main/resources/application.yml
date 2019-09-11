@@ -1,27 +1,27 @@
 media-organizer: 
   source-directory: \\server\share\source
   test-mode: false
-  log-all-tags: false
-  mode: DUPLICATE_HUNTER  #TO_QUARTERLY_FOLDERS
-  quarterly-folders:    
+  mode: DUPLICATE_HUNTER  #TO_QUARTERLY_FOLDERS, RENAME-FILES
+  quarterly-folders-config:
     destination-directory: \\server\share\dest
-    date-source: METADATA_THEN_FILE_CREATION  #	see com.example.mediaorganizer.domain.DateSources enum
+    date-source: METADATA_THEN_FILE_CREATION
     delete-duplicates: false
-    file-extensions:
+    log-all-tags: false
+    file-extensions:  
     - jpg
     - jpeg
     - mov
     - mp4
-    - png
     - JPG
     - JPEG
-    - PNG
     - MOV
-    - MP4
-  duplicate-hunter:
+    - MP4 
+  duplicate-hunter-config:
     file-extensions:
     - jpg
     - jpeg
     - JPG
     - JPEG
-  
+  rename-files-config:
+    replace: " - Copy"
+    replace-with: ""
